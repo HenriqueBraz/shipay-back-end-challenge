@@ -1,0 +1,213 @@
+<mxfile host="app.diagrams.net" agent="ChatGPT">
+  <diagram name="Arquitetura atualizada" id="0">
+    <mxGraphModel dx="1800" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;" value="Q1 — Arquitetura de providers e resolução" vertex="1">
+          <mxGeometry height="40" width="360" x="420" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="config" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=13;" value="Config&#xa;&#xa;URLs • timeout • retries&#xa;primary • fallback" vertex="1">
+          <mxGeometry height="100" width="220" x="525" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="factory" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFF33;strokeColor=#666666;fontSize=13;" value="ProviderFactory&#xa;&#xa;Cria todos os providers&#xa;com base na configuração" vertex="1">
+          <mxGeometry height="100" width="250" x="510" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="5VX00GofsmBRFinp2Rkm-3" edge="1" parent="1" source="validation" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="address" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="635" y="950" />
+              <mxPoint x="630" y="950" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5VX00GofsmBRFinp2Rkm-5" connectable="0" parent="5VX00GofsmBRFinp2Rkm-3" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;b&gt;usa / compara&lt;/b&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.0011" y="-3" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="validation" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#66B2FF;strokeColor=#666666;fontSize=13;" value="ValidationService&lt;br&gt;&lt;br&gt;Orquestra a validação&lt;br&gt;CNPJ + CepResolver + comparação&lt;br&gt;200 / 404" vertex="1">
+          <mxGeometry height="100" width="250" x="515" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="cnpj" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CCFFCC;strokeColor=#666666;fontSize=13;" value="CnpjProvider&#xa;&#xa;HTTP + Timeout + Retry&#xa;Circuit Breaker" vertex="1">
+          <mxGeometry height="100" width="230" x="80" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="resolver" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=13;" value="CepResolver&#xa;&#xa;Coordena primary → fallback" vertex="1">
+          <mxGeometry height="100" width="220" x="1000" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="cnpj_adapter" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=13;" value="CnpjAdapter&#xa;&#xa;Contrato externo → Address" vertex="1">
+          <mxGeometry height="90" width="230" x="160" y="850" as="geometry" />
+        </mxCell>
+        <mxCell id="brasil" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CCFFCC;strokeColor=#666666;fontSize=13;" value="BrasilApiCepProvider&#xa;&#xa;HTTP + Timeout + Retry&#xa;Circuit Breaker + Adapter" vertex="1">
+          <mxGeometry height="100" width="230" x="860" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="via" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CCFFCC;strokeColor=#666666;fontSize=13;" value="ViaCepProvider&#xa;&#xa;HTTP + Timeout + Retry&#xa;Circuit Breaker + Adapter" vertex="1">
+          <mxGeometry height="100" width="220" x="1170" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="address" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=13;" value="Address&#xa;&#xa;state / city / street" vertex="1">
+          <mxGeometry height="90" width="220" x="525" y="860" as="geometry" />
+        </mxCell>
+        <mxCell id="api_cnpj" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CDA2BE;strokeColor=#888888;fontSize=13;" value="BrasilAPI&#xa;CNPJ" vertex="1">
+          <mxGeometry height="40" width="120" x="60" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="api_cep" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CDA2BE;strokeColor=#888888;fontSize=13;" value="BrasilAPI&#xa;CEP" vertex="1">
+          <mxGeometry height="40" width="110" x="920" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="api_via" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CDA2BE;strokeColor=#888888;fontSize=13;" value="ViaCEP&#xa;CEP" vertex="1">
+          <mxGeometry height="30" width="110" x="1290" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="note" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=12;" value="Adapter = traduz contrato externo&#xa;Provider = comunicação + resiliência&#xa;Resolver = escolha/fallback" vertex="1">
+          <mxGeometry height="90" width="390" x="930" y="1410" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="config" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="factory" value="&lt;b&gt;configura&lt;/b&gt;">
+          <mxGeometry relative="1" x="-0.3455" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="730" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="factory" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" target="cnpj" value="&lt;b&gt;cria&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="factory" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" target="brasil" value="&lt;b&gt;cria&lt;/b&gt;">
+          <mxGeometry relative="1" x="0.2809" as="geometry">
+            <mxPoint y="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="875" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="factory" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" target="via" value="&lt;b&gt;cria&lt;/b&gt;">
+          <mxGeometry relative="1" x="-0.6512" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="validation" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" value="&lt;b&gt;usa&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="350" y="760" />
+              <mxPoint x="350" y="420" />
+              <mxPoint x="195" y="420" />
+            </Array>
+            <mxPoint x="195" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="validation" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="resolver" value="&lt;b&gt;usa&lt;/b&gt;">
+          <mxGeometry relative="1" x="-0.4969" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="800" y="760" />
+              <mxPoint x="800" y="450" />
+              <mxPoint x="1110" y="450" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="resolver" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;entryX=0.826;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;" target="brasil" value="&lt;b&gt;usa&lt;/b&gt;">
+          <mxGeometry relative="1" x="0.0022" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="resolver" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" target="via" value="&lt;b&gt;fallback&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="cnpj" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;exitX=0.75;exitY=1;exitDx=0;exitDy=0;" target="cnpj_adapter" value="&lt;b&gt;usa&lt;/b&gt;">
+          <mxGeometry relative="1" x="0.1998" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="252.5" y="730" />
+              <mxPoint x="252.5" y="730" />
+            </Array>
+            <mxPoint x="250" y="310" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="5VX00GofsmBRFinp2Rkm-48" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;entryX=0.75;entryY=1;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="address" value="&lt;b&gt;normaliza&lt;/b&gt;">
+          <mxGeometry relative="1" x="0.5789" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="600" y="1070" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="5VX00GofsmBRFinp2Rkm-49" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="address" value="&lt;b&gt;normaliza&lt;/b&gt;">
+          <mxGeometry relative="1" x="0.6051" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1280" y="1020" />
+              <mxPoint x="635" y="1020" />
+            </Array>
+            <mxPoint x="1150" y="850" as="sourcePoint" />
+            <mxPoint x="890" y="870" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="cnpj_adapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" target="address" value="&lt;b&gt;normaliza&lt;/b&gt;">
+          <mxGeometry relative="1" x="0.2647" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="410" y="900" />
+              <mxPoint x="410" y="1020" />
+              <mxPoint x="580" y="1020" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="cnpj" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;exitX=0.192;exitY=1.003;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="api_cnpj" value="&lt;b&gt;chama&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+            <mxPoint x="80" y="480" as="sourcePoint" />
+            <mxPoint x="80" y="750" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="brasil" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" target="api_cep" value="&lt;b&gt;chama&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="via" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;exitX=0.75;exitY=0;exitDx=0;exitDy=0;" target="api_via" value="&lt;b&gt;chama&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5VX00GofsmBRFinp2Rkm-36" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#33FF33;" value="Cliente" vertex="1">
+          <mxGeometry height="60" width="120" x="580" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="5VX00GofsmBRFinp2Rkm-37" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="FastAPI" vertex="1">
+          <mxGeometry height="60" width="120" x="580" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="5VX00GofsmBRFinp2Rkm-38" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="ValidationRequiest&lt;br&gt;Pydantic" vertex="1">
+          <mxGeometry height="60" width="120" x="580" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="5VX00GofsmBRFinp2Rkm-40" edge="1" parent="1" source="5VX00GofsmBRFinp2Rkm-36" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="5VX00GofsmBRFinp2Rkm-37" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="760" y="560" as="sourcePoint" />
+            <mxPoint x="810" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5VX00GofsmBRFinp2Rkm-41" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="HTTP POST" vertex="1">
+          <mxGeometry height="30" width="60" x="650" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="5VX00GofsmBRFinp2Rkm-42" edge="1" parent="1" source="5VX00GofsmBRFinp2Rkm-37" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="5VX00GofsmBRFinp2Rkm-38" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="760" y="550" as="sourcePoint" />
+            <mxPoint x="810" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5VX00GofsmBRFinp2Rkm-43" edge="1" parent="1" source="5VX00GofsmBRFinp2Rkm-38" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="validation" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="760" y="840" as="sourcePoint" />
+            <mxPoint x="810" y="790" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5VX00GofsmBRFinp2Rkm-48" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=13;" value="BrasilApiCepAdapter&lt;br&gt;&lt;br&gt;Contrato externo → Address" vertex="1">
+          <mxGeometry height="90" width="230" x="860" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="5VX00GofsmBRFinp2Rkm-49" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=13;" value="ViaCepAdapter&lt;br&gt;&lt;br&gt;Contrato externo → Address" vertex="1">
+          <mxGeometry height="90" width="230" x="1165" y="860" as="geometry" />
+        </mxCell>
+        <mxCell id="5VX00GofsmBRFinp2Rkm-50" edge="1" parent="1" source="brasil" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="5VX00GofsmBRFinp2Rkm-48" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="860" y="860" as="sourcePoint" />
+            <mxPoint x="910" y="810" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5VX00GofsmBRFinp2Rkm-51" edge="1" parent="1" source="via" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="5VX00GofsmBRFinp2Rkm-49" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="860" y="860" as="sourcePoint" />
+            <mxPoint x="910" y="810" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
