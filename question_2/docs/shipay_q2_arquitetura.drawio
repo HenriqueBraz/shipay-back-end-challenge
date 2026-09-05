@@ -1,0 +1,91 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0">
+  <diagram id="q2-v2" name="Q2 - Arquitetura">
+    <mxGraphModel dx="1800" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=24;fontStyle=1;" value="Questão 2 — Arquitetura de Reporting desacoplada do serviço de lançamento" vertex="1">
+          <mxGeometry height="50" width="980" x="430" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="critical" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=14;fontStyle=1;dashed=1;" value="CAMINHO CRÍTICO DO LANÇAMENTO&lt;br&gt;&lt;br&gt;O reporting é um workflow secundário e não pode bloquear nem alterar o resultado do lançamento." vertex="1">
+          <mxGeometry height="70" width="1330" x="230" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="client" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=16;fontStyle=1;" value="Cliente" vertex="1">
+          <mxGeometry height="75" width="150" x="240" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="api" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=15;fontStyle=1;" value="Launch API&lt;br&gt;&lt;br&gt;POST /v1/rocket/launch" vertex="1">
+          <mxGeometry height="125" width="230" x="560" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="service" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=15;fontStyle=1;" value="LaunchService&lt;br&gt;&lt;br&gt;Executa o lançamento" vertex="1">
+          <mxGeometry height="125" width="230" x="560" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="result" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=15;fontStyle=1;" value="Lançamento concluído&lt;br&gt;&lt;br&gt;launch_result" vertex="1">
+          <mxGeometry height="125" width="230" x="880" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="response" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=15;fontStyle=1;" value="Resposta HTTP&lt;br&gt;&lt;br&gt;retorna launch_result" vertex="1">
+          <mxGeometry height="125" width="210" x="1460" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="event" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;fontStyle=1;" value="ReportingEventPublisher&amp;nbsp;&lt;br&gt;&lt;br&gt;event_id&lt;br&gt;trace_id&lt;br&gt;customer_id&lt;br&gt;launched_at" vertex="1">
+          <mxGeometry height="175" width="240" x="560" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="queue" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;fontStyle=1;" value="SQS — Reporting Queue&lt;br&gt;&lt;br&gt;┌────────────────────────┐&lt;br&gt;│ RocketLaunchedEvent │&lt;br&gt;│ RocketLaunchedEvent │&lt;br&gt;│ RocketLaunchedEvent │&lt;br&gt;└────────────────────────┘&lt;br&gt;&lt;br&gt;Durabilidade / desacoplamento" vertex="1">
+          <mxGeometry height="215" width="300" x="1200" y="850" as="geometry" />
+        </mxCell>
+        <mxCell id="consumer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;fontStyle=1;" value="Reporting Consumer&lt;br&gt;&lt;br&gt;1. recebe mensagem&lt;br&gt;2. persiste no Reporting DB&lt;br&gt;3. ACK somente após sucesso&lt;br&gt;4. retry + backoff em falhas" vertex="1">
+          <mxGeometry height="170" width="320" x="1190" y="1160" as="geometry" />
+        </mxCell>
+        <mxCell id="db" parent="1" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;" value="Reporting DB&lt;br&gt;&lt;br&gt;Banco de dados paralelo&lt;br&gt;&lt;br&gt;event_id (UNIQUE)&lt;br&gt;customer_id&lt;br&gt;launched_at" vertex="1">
+          <mxGeometry height="175" width="240" x="720" y="1160" as="geometry" />
+        </mxCell>
+        <mxCell id="report" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;fontStyle=1;" value="Relatório&lt;br&gt;&lt;br&gt;Intervalo de 30 dias&lt;br&gt;&lt;br&gt;GROUP BY customer_id&lt;br&gt;COUNT(*)" vertex="1">
+          <mxGeometry height="145" width="230" x="300" y="1172.5" as="geometry" />
+        </mxCell>
+        <mxCell id="failure" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;" value="Falha no reporting&lt;br&gt;&lt;br&gt;retry limitado → log / observabilidade&lt;br&gt;→ recuperação operacional&lt;br&gt;&lt;br&gt;O lançamento já concluído permanece bem-sucedido." vertex="1">
+          <mxGeometry height="190" width="170" x="1600" y="862.5" as="geometry" />
+        </mxCell>
+        <mxCell id="codeTitle" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=16;fontStyle=1;" value="ALTERAÇÃO NO ENDPOINT EXISTENTE" vertex="1">
+          <mxGeometry height="45" width="1700" x="70" y="1440" as="geometry" />
+        </mxCell>
+        <mxCell id="before" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFF99;strokeColor=#999999;fontSize=13;fontStyle=1;align=left;" value="ANTES&lt;br&gt;&lt;br&gt;&lt;pre style=&quot;margin:0;font-family:monospace;font-size:12px;text-align:left;&quot;&gt;return await service.launch(trace_id=trace_id,&lt;br&gt;                            customer_id=schema.customer_id,&lt;br&gt;                            countdown_status=countdown_status,&lt;br&gt;                            pre_flight=pre_flight)&lt;/pre&gt;" vertex="1">
+          <mxGeometry height="115" width="760" x="90" y="1520" as="geometry" />
+        </mxCell>
+        <mxCell id="after" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#99FF99;strokeColor=#b85450;fontSize=13;fontStyle=1;align=left;" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;DEPOIS&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 14px; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;async def launch(&lt;/span&gt;&lt;span style=&quot;background-color: transparent; font-size: 14px;&quot;&gt;request: Request, schema: LaunchRequestBody = None,&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 14px;&quot;&gt;service:&lt;br&gt;LaunchService=Depends(Provide[Container.launch_service]),&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 14px;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 14px;&quot;&gt;reporting_event_publisher: ReportingEventPublisher=Depends(&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 14px;&quot;&gt;Provide[Container.reporting_event_publisher]&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 14px;&quot;&gt;)):&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span class=&quot;undefined&quot; style=&quot;margin: 0px; border-bottom: 0px rgb(0, 29, 53); font-size: 14px;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;...&lt;/span&gt;&lt;/div&gt;&lt;/span&gt;&lt;/div&gt;&lt;br&gt;&lt;pre style=&quot;margin: 0px; text-align: left;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;launch_result = await service.launch(trace_id=trace_id,&lt;br&gt;                              customer_id=schema.customer_id,&lt;br&gt;                              countdown_status=countdown_status,&lt;br&gt;                              pre_flight=pre_flight)&lt;br&gt;&lt;br&gt;event_id = str(uuid4())&lt;br&gt;try:&lt;br&gt;    event = RocketLaunchedEvent(&lt;br&gt;&lt;/span&gt;&lt;font face=&quot;Helvetica&quot;&gt;&lt;span style=&quot;font-size: 12px; white-space: normal;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;event&lt;/span&gt;&lt;/font&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;_id=event_id&lt;/span&gt;,&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;font face=&quot;Helvetica&quot;&gt;&lt;span style=&quot;white-space: normal;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;    trace_id=trace_id,&lt;br&gt;    customer_id=schema.customer_id,&lt;br&gt;    launched_at=...)&lt;br&gt;&lt;br&gt;    await reporting_event_publisher.publish(event)&lt;br&gt;&lt;br&gt;except Exception as exception:&lt;br&gt;   # registrar a ocorrência para recuperação: event_id, etc&lt;br&gt;    pass&lt;br&gt;&lt;br&gt;return launch_result&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="590" width="570" x="980" y="1520" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="client" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;fontSize=12;" target="api" value="POST /launch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;fontSize=12;" target="service" value="request existente">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="service" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;fontSize=12;" target="result" value="resultado">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="result" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;fontSize=12;" target="response" value="retorna resultado">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="response" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;fontSize=12;" target="client" value="HTTP response">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="result" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;fontSize=12;" target="event" value="após sucesso">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="event" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;fontSize=12;" target="queue" value="SendMessage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="queue" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;fontSize=12;" target="consumer" value="ReceiveMessage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="consumer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;fontSize=12;" target="db" value="INSERT / upsert idempotente">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="db" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;fontSize=12;" target="report" value="consulta 30d">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="failure" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;fontSize=12;" target="queue" value="falha isolada">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
