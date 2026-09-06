@@ -1,0 +1,77 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Q3 - Fluxo e Testes Enxuto" id="0">
+    <mxGraphModel dx="1800" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;" value="&lt;b&gt;Q3 — Fluxo do Agendador e Testes de Performance&lt;/b&gt;" vertex="1">
+          <mxGeometry height="70" width="1480" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="s1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1;" value="&lt;b&gt;1. WORKFLOW&lt;/b&gt;&lt;br&gt;Passos antes do agendamento&lt;br&gt;&lt;br&gt;Envia o POST ao Scheduler" vertex="1">
+          <mxGeometry height="120" width="230" x="60" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="s2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1;" value="&lt;b&gt;2. SCHEDULER&lt;/b&gt;&lt;br&gt;POST /v1/render/scheduler&lt;br&gt;&lt;br&gt;enqueue_at(datetime, publish_event, event_content)" vertex="1">
+          <mxGeometry height="140" width="280" x="340" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontStyle=1;" value="&lt;b&gt;3. RQ / REDIS&lt;/b&gt;&lt;br&gt;RQ Queue + Redis&lt;br&gt;&lt;br&gt;Job fica agendado até o horário" vertex="1">
+          <mxGeometry height="120" width="250" x="680" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="s4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1;" value="&lt;b&gt;4. RQ WORKER&lt;/b&gt;&lt;br&gt;Executa o job quando o horário chega&lt;br&gt;&lt;br&gt;→ publish_event(event_content)" vertex="1">
+          <mxGeometry height="140" width="280" x="990" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="s5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontStyle=1;" value="&lt;b&gt;5. KAFKA → SUBSCRIBER&lt;/b&gt;&lt;br&gt;Publica no tópico de verificação&lt;br&gt;&lt;br&gt;Subscriber recebe e o workflow continua" vertex="1">
+          <mxGeometry height="140" width="320" x="1390" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="f0" edge="1" parent="1" source="s1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="s2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f1" edge="1" parent="1" source="s2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="s3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f2" edge="1" parent="1" source="s3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="s4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f3" edge="1" parent="1" source="s4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="s5" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tests" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCC99;strokeColor=#d6b656;fontSize=12;align=center;" value="&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;TESTES PRINCIPAIS — PERFORMANCE&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;b&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;① Load Test&lt;/b&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-weight: normal;&quot;&gt; —&amp;nbsp; &amp;nbsp; &lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-weight: normal;&quot;&gt;Locust → 1.000 req/s sustentadas&amp;nbsp;&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-weight: normal;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Warm-up → janela de medição&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-weight: normal;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;/b&gt;&lt;b&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;② Stress Test&lt;/b&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-weight: normal;&quot;&gt; —&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-weight: normal;&quot;&gt;Aumento progressivo da carga&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-weight: normal;&quot;&gt;até identificar degradação&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-weight: normal;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;/b&gt;&lt;div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;③ Spike Test&lt;/b&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt; —&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; text-align: center;&quot;&gt;Aumento abrupto + retorno à carga normal&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;background-color: transparent; text-align: center;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;b&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;④ Soak / Endurance&lt;/b&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-weight: normal;&quot;&gt; — carga próxima de 1.000 req/s por período prolongado&lt;/span&gt;&lt;/div&gt;&lt;/b&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="220" width="650" x="300" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="testlink" edge="1" parent="1" source="s2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="tests" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="async" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;" value="&lt;b&gt;VALIDAÇÃO COMPLEMENTAR — FLUXO ASSÍNCRONO&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div&gt;Durante o teste de carga, acompanhar:&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;• jobs processados/s&lt;/div&gt;&lt;div&gt;• backlog RQ/Redis&lt;/div&gt;&lt;div&gt;• tempo até execução&lt;/div&gt;&lt;div&gt;• throughput/lag Kafka&lt;/div&gt;&lt;div&gt;• capacidade do subscriber&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Objetivo:&lt;/div&gt;&lt;div&gt;garantir que o processamento assíncrono&lt;/div&gt;&lt;div&gt;acompanha a taxa de entrada.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="220" width="600" x="1010" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="metrics" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;" value="&lt;b&gt;MÉTRICAS&lt;/b&gt;&lt;br&gt;&lt;br&gt;Throughput (req/s) • P50 • P95 • &lt;b&gt;P99&lt;/b&gt; • taxa de erro&lt;br&gt;CPU/memória • latência RQ/Redis • backlog/lag" vertex="1">
+          <mxGeometry height="150" width="430" x="300" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="accept" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#66FF66;strokeColor=#82b366;fontSize=12;" value="&lt;b&gt;CRITÉRIO DE APROVAÇÃO&lt;/b&gt;&lt;br&gt;&lt;br&gt;✓ Throughput ≥ 1.000 req/s&lt;br&gt;✓ P99 ≤ 30 ms&lt;br&gt;✓ Serviço estável e sem degradação anormal durante a carga" vertex="1">
+          <mxGeometry height="150" width="430" x="760" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="execution" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFF99;strokeColor=#666666;fontSize=12;align=center;" value="&lt;div style=&quot;&quot;&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;COMO EXECUTAR&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;• Locust: geração da carga + coleta das métricas HTTP &amp;nbsp;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;• Payloads representativos&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;• Ambiente controlado&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;• Warm-up: período inicial descartado da medição&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;•&amp;nbsp;Throughput → ≥ 1.000 req/s&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;•&amp;nbsp;P99 → ≤ 30 ms&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;•&amp;nbsp;Taxa de erro → identificar falhas sob carga&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;•&amp;nbsp;P50/P95 → diagnóstico da distribuição&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;• Monitoramento de CPU/memória&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;• Repetir testes para confirmar consistência&lt;/div&gt;" vertex="1">
+          <mxGeometry height="310" width="430" x="1220" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="boundary" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;" value="&lt;b&gt;FRONTEIRA DA LATÊNCIA&lt;/b&gt;&lt;br&gt;&lt;br&gt;Medir a requisição HTTP do Scheduler:&lt;br&gt;&lt;b&gt;request → enqueue_at / RQ-Redis → response&lt;/b&gt;&lt;br&gt;&lt;br&gt;O processamento posterior é assíncrono e é medido separadamente." vertex="1">
+          <mxGeometry height="120" width="880" x="300" y="890" as="geometry" />
+        </mxCell>
+        <mxCell id="ZUQScwar4CfsaIRGLx6U-1" parent="1" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;flipH=1;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;legacyAnchorPoints=0;rotation=90;size=0.5;" value="" vertex="1">
+          <mxGeometry height="1030" width="20" x="1185" y="-185" as="geometry" />
+        </mxCell>
+        <mxCell id="ZUQScwar4CfsaIRGLx6U-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;b&gt;Fluxo Assíncrono&lt;/b&gt;" vertex="1">
+          <mxGeometry height="30" width="60" x="1165" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="ZUQScwar4CfsaIRGLx6U-3" edge="1" parent="1" source="ZUQScwar4CfsaIRGLx6U-1" style="endArrow=classic;html=1;rounded=0;exitX=0.1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="async" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="1195" y="380" />
+              <mxPoint x="1310" y="380" />
+            </Array>
+            <mxPoint x="1040" y="450" as="sourcePoint" />
+            <mxPoint x="1090" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
